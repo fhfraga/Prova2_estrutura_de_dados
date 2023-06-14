@@ -2,6 +2,34 @@ from sistema.animais import Animal
 from sistema.pessoas import Pessoa
 
 
+class Animal:
+    contador = 0
+
+    def __init__(self, tipo, idade, cor, porte, particularidade):
+        self.id = Animal.contador + 1
+        self.tipo = tipo
+        self.idade = idade
+        self.cor = cor
+        self.porte = porte
+        self.particularidade = particularidade
+        Animal.contador = self.id
+
+
+class Pessoa:
+    contador = 0
+    pontuacao = 0
+
+    def __init__(self, nome, telefone, email, especie, preferencia):
+        self.id = Pessoa.contador + 1
+        self.nome = nome
+        self.telefone = telefone
+        self.email = email
+        self.especie = especie
+        self.preferencia = preferencia
+        Pessoa.contador = self.id
+        self.pontuacao = Pessoa.pontuacao
+
+
 class Sistema:
     contador = 0
 
@@ -19,8 +47,7 @@ class Sistema:
         pessoa = Pessoa(nome, telefone, email, especie, preferencia)
         self.pessoas.append(pessoa)
 
-    def todos_animais(self):
-        dicionario = {}
+    def relatorio_todos_animais(self):
         for animal in self.animais:
             print(f'id: {animal.id}')
             print(f'tipo: {animal.tipo}')
@@ -34,11 +61,12 @@ class Sistema:
             print(f'Relatório Nº {self.id}')
             print(f'Candidato: {pessoa.nome}')
             print(f'Espécie de interesse: {pessoa.especie}')
+            print(f'Particulariedade desejada: {pessoa.preferencia}')
             print('Animais correspondentes:')
             for animal in self.animais:
                 if animal.tipo == pessoa.especie:
                     print(
-                        f'-Id animal {animal.id} ,Tipo: {animal.tipo}, Idade: {animal.idade}, Cor: {animal.cor}, Porte: {animal.porte}, Particularidade: {animal.particularidade}')
+                        f'-Id animal: {animal.id} ,Tipo: {animal.tipo}, Idade: {animal.idade}, Cor: {animal.cor}, Porte: {animal.porte}, Particularidade: {animal.particularidade}')
                     idade = 0
                     cor = 0
                     porte = 0
@@ -54,7 +82,39 @@ class Sistema:
             print('---------------------------------------')
 
     def pesquisar_animal(self, tipo, idade, cor, porte, particularidade):
+
         for animal in self.animais:
             if animal.tipo == tipo and animal.idade == idade and animal.cor == cor and animal.porte == porte and animal.particularidade == particularidade:
                 print(f'O animal pesquisado é o animal de Id {animal.id}')
         return 'Nenhum animal encontrado com tais características'
+
+    def pesquisar_animal_pesquisa_binaria_recursiva(self, item, inicio=0, fim=None):
+        lista_id = []
+        lista_porte = []
+
+        for animal in self.animais:
+            lista_porte.append(animal.porte)
+            lista_id.append(animal.id)
+
+        lista_merge = [(lista_id[i], lista_porte[i])
+                       for i in range(0, len(lista_id))]
+
+        if fim is None:
+            fim = len(lista_porte)-1
+        if inicio <= fim:
+            metade = (inicio + fim) // 2
+            if lista_merge[metade][1] == item:
+                # achou
+                print(f'O id do animal procurado é: {lista_merge[metade][0]}')
+                # for animal in self.animais:
+                #    lista_id.append(animal.id)
+                for animal in self.animais:
+                    if animal.id == lista_merge[metade][0]:
+                        print(f'-Id animal: {animal.id} ,Tipo: {animal.tipo}, \
+Idade: {animal.idade}, Cor: {animal.cor}, Porte: {animal.porte}, Particularidade: {animal.particularidade}')
+                        print('---------------------------------------')
+            elif item < lista_porte[metade]:  # procura a esquerda
+                return pesquisar_animal_pesquisa_binaria_recursiva(self, item, inicio, metade-1)
+            else:  # procura a direita
+                return pesquisar_animal_pesquisa_binaria_recursiva(self, item, metade+1, fim)
+        return 'Não há animais com essa característica'
