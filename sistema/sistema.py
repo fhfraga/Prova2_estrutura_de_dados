@@ -1,35 +1,6 @@
 from sistema.animais import Animal
 from sistema.pessoas import Pessoa
 
-
-class Animal:
-    contador = 0
-
-    def __init__(self, tipo, idade, cor, porte, particularidade):
-        self.id = Animal.contador + 1
-        self.tipo = tipo
-        self.idade = idade
-        self.cor = cor
-        self.porte = porte
-        self.particularidade = particularidade
-        Animal.contador = self.id
-
-
-class Pessoa:
-    contador = 0
-    pontuacao = 0
-
-    def __init__(self, nome, telefone, email, especie, preferencia):
-        self.id = Pessoa.contador + 1
-        self.nome = nome
-        self.telefone = telefone
-        self.email = email
-        self.especie = especie
-        self.preferencia = preferencia
-        Pessoa.contador = self.id
-        self.pontuacao = Pessoa.pontuacao
-
-
 class Sistema:
     contador = 0
 
